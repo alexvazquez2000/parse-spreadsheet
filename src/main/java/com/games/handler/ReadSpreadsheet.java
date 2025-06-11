@@ -3,6 +3,9 @@ package com.games.handler;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -169,6 +172,10 @@ public class ReadSpreadsheet {
 			String phone = dataFormatter.formatCellValue(row.getCell(3));
 			String playerName = row.getCell(4).getRichStringCellValue().getString();
 			String dob = dataFormatter.formatCellValue(row.getCell(5));
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy");
+			LocalDate localDate = LocalDate.parse(dob,formatter);
+			Date date = Date.valueOf(localDate);
 			String jersey = dataFormatter.formatCellValue(row.getCell(6));
 			String teamName = row.getCell(7).getRichStringCellValue().getString();
 //			System.out.println("parent Name :" + parentName +  "\n"
@@ -200,6 +207,7 @@ public class ReadSpreadsheet {
 				jerseyNum = Integer.valueOf(jersey);
 			}
 			Player player = new Player(playerName, dob, jerseyNum);
+			player.setDate_of_birth(date);
 			//see if player already exists
 			if (players.containsKey(playerName)) {
 				//Don't add parents again, just add to the additional team

@@ -1,6 +1,7 @@
 package com.games.bean;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,8 @@ public class Player implements Serializable {
 	private List<Parent> parents = new ArrayList<>();
 	private Parent altParent;
 	private String dob;
-	private int jerseyNumber;
+	private Date date_of_birth;
+	private int jersey_number;
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "players")
 	private List<Team> teams = new ArrayList<>();
 
@@ -40,12 +42,12 @@ public class Player implements Serializable {
 	/**
 	 * @param name
 	 * @param dob
-	 * @param jerseyNumber
+	 * @param jersey_number
 	 */
-	public Player(String name, String dob, int jerseyNumber) {
+	public Player(String name, String dob, int jersey_number) {
 		this.name = name;
 		this.dob = dob;
-		this.jerseyNumber = jerseyNumber;
+		this.jersey_number = jersey_number;
 	}
 
 	/**
@@ -119,17 +121,31 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * @return the jerseyNumber
+	 * @return the date_of_birth
 	 */
-	public int getJerseyNumber() {
-		return jerseyNumber;
+	public Date getDate_of_birth() {
+		return date_of_birth;
 	}
 
 	/**
-	 * @param jerseyNumber the jerseyNumber to set
+	 * @param date_of_birth the date_of_birth to set
 	 */
-	public void setJerseyNumber(int jerseyNumber) {
-		this.jerseyNumber = jerseyNumber;
+	public void setDate_of_birth(Date date_of_birth) {
+		this.date_of_birth = date_of_birth;
+	}
+
+	/**
+	 * @return the jersey_number
+	 */
+	public int getJersey_number() {
+		return jersey_number;
+	}
+
+	/**
+	 * @param jersey_number the jersey_number to set
+	 */
+	public void setJersey_number(int jersey_number) {
+		this.jersey_number = jersey_number;
 	}
 
 	public List<Team> getTeams() {
@@ -144,7 +160,7 @@ public class Player implements Serializable {
 	@Override
 	public String toString() {
 		return "Player [name=" + name + ", dob=" + dob
-				+ ", jerseyNumber=" + jerseyNumber + "]";
+				+ ", jersey_number=" + jersey_number + "]";
 	}
 
 
