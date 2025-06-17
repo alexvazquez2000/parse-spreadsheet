@@ -3,6 +3,7 @@ package com.games.bean;
 import java.io.Serializable;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,9 +25,14 @@ public class Coach implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Column(columnDefinition="varchar(100)")
 	private String name;
+	@Column(columnDefinition="varchar(20)")
 	private String phone;
+	@Column(columnDefinition="varchar(100)")
 	private String email;
+	@Column(columnDefinition="varchar(255)")
+	private String photo;
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "coaches")
 	private List<Team> teams;
 

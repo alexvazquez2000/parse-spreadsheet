@@ -30,6 +30,7 @@ public class Team implements Serializable {
 	private long id;
 	private String season;
 	private String teamName;
+	private String logo;
 	@ManyToMany
 	private List<Player> players = new ArrayList<>();
 	@ManyToMany
@@ -116,6 +117,20 @@ public class Team implements Serializable {
 	 */
 	public void setCoaches(List<Coach> coaches) {
 		this.coaches = coaches;
+	}
+
+	/**
+	 * @return the logo
+	 */
+	public String getLogo() {
+		return logo;
+	}
+
+	/**
+	 * @param logo the logo to set
+	 */
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 
 	@Override

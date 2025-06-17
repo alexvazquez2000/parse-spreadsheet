@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,8 +24,11 @@ public class Parent implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Column(columnDefinition="varchar(100)")
 	private String name;
+	@Column(columnDefinition="varchar(20)")
 	private String phone;
+	@Column(columnDefinition="varchar(100)")
 	private String email;
 	@ManyToMany(mappedBy= "parents")
 	private List<Player> players = new ArrayList<>();

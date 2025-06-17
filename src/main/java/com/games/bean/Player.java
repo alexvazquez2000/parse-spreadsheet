@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -25,10 +26,10 @@ public class Player implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Column(columnDefinition="varchar(100)")
 	private String name;
 	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Parent> parents = new ArrayList<>();
-	private Parent altParent;
 	private String dob;
 	private Date date_of_birth;
 	private int jersey_number;
@@ -90,20 +91,6 @@ public class Player implements Serializable {
 	 */
 	public void setParents(List<Parent> parents) {
 		this.parents = parents;
-	}
-
-	/**
-	 * @return the altParent
-	 */
-	public Parent getAltParent() {
-		return altParent;
-	}
-
-	/**
-	 * @param altParent the altParent to set
-	 */
-	public void setAltParent(Parent altParent) {
-		this.altParent = altParent;
 	}
 
 	/**
