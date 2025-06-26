@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
@@ -31,8 +32,15 @@ public class Coach implements Serializable {
 	private String phone;
 	@Column(columnDefinition="varchar(100)")
 	private String email;
-	@Column(columnDefinition="varchar(255)")
-	private String photo;
+	
+	@Lob // Mark this property as a Large Object
+	@Column(name = "photo", columnDefinition = "BLOB") // Optional column details
+	private byte[] photo;
+	
+	@Lob // Mark this property as a Large Object
+	@Column(name = "thumbnail", columnDefinition = "BLOB") // Optional column details
+	private byte[] thumbnail;
+	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "coaches")
 	private List<Team> teams;
 
