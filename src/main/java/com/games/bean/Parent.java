@@ -24,8 +24,10 @@ public class Parent implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	@Column(columnDefinition="varchar(100)")
-	private String name;
+	@Column(name = "first_name", columnDefinition="varchar(100)")
+	private String firstName;
+	@Column(name = "last_name", columnDefinition="varchar(100)")
+	private String lastName;
 	@Column(columnDefinition="varchar(20)")
 	private String phone;
 	@Column(columnDefinition="varchar(100)")
@@ -44,8 +46,9 @@ public class Parent implements Serializable {
 	 * @param phone
 	 * @param email
 	 */
-	public Parent(String parentName, String phone, String email) {
-		this.name = parentName;
+	public Parent(String firstName, String lastName, String phone, String email) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.phone = phone;
 		this.email = email;
 	}
@@ -62,21 +65,6 @@ public class Parent implements Serializable {
 	 */
 	public void setId(long id) {
 		this.id = id;
-	}
-
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	/**
@@ -123,7 +111,7 @@ public class Parent implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Parent [Name=" + name + ", phone=" + phone + ", email=" + email
+		return "Parent [Name=" + firstName + " " + lastName + ", phone=" + phone + ", email=" + email
 				//+ ", players=" + players
 				+ "]";
 	}

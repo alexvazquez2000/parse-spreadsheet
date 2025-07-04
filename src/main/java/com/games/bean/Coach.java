@@ -26,15 +26,22 @@ public class Coach implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	@Column(columnDefinition="varchar(100)")
-	private String name;
+	@Column(name = "first_name", columnDefinition="varchar(100)")
+	private String firstName;
+	@Column(name = "last_name", columnDefinition="varchar(100)")
+	private String lastName;
 	@Column(columnDefinition="varchar(20)")
 	private String phone;
 	@Column(columnDefinition="varchar(100)")
 	private String email;
 	
+	//BLOB: Can handle up to 65,535 bytes of data.
+	//MEDIUMBLOB: The maximum length supported is 16,777,215 bytes.
+	//LONGBLOB: Stores up to 4,294,967,295 bytes of data.
+	//photos from my cell are in the 60KB to 555KB size
+
 	@Lob // Mark this property as a Large Object
-	@Column(name = "photo", columnDefinition = "BLOB") // Optional column details
+	@Column(name = "photo", columnDefinition = "MEDIUMBLOB") // Optional column details
 	private byte[] photo;
 	
 	@Lob // Mark this property as a Large Object
@@ -68,8 +75,9 @@ public class Coach implements Serializable {
 	 * @param phone
 	 * @param email
 	 */
-	public Coach(String coachName, String phone, String email) {
-		this.name = coachName;
+	public Coach(String firstName, String lastName, String phone, String email) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.phone = phone;
 		this.email = email;
 	}
@@ -86,20 +94,6 @@ public class Coach implements Serializable {
 	 */
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	/**
-	 * @return the coachName
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param coachName name the coachName to set
-	 */
-	public void setName(String coachName) {
-		this.name = coachName;
 	}
 
 	/**
@@ -132,6 +126,6 @@ public class Coach implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Coach [id=" + id + ", name=" + name + ", phone=" + phone + ", email=" + email + "]";
+		return "Coach [id=" + id + ", name=" + firstName + " " + lastName + ", phone=" + phone + ", email=" + email + "]";
 	}
 }

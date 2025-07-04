@@ -26,13 +26,17 @@ public class Player implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	@Column(columnDefinition="varchar(100)")
-	private String name;
+	@Column(name = "first_name", columnDefinition="varchar(100)")
+	private String firstName;
+	@Column(name = "last_name", columnDefinition="varchar(100)")
+	private String lastName;
 	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Parent> parents = new ArrayList<>();
 	private String dob;
-	private Date date_of_birth;
-	private int jersey_number;
+	@Column(name = "date_of_birth")
+	private Date dateOfBirth;
+	@Column(name = "jersey_number")
+	private int jerseyNumber;
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "players")
 	private List<Team> teams = new ArrayList<>();
 
@@ -43,12 +47,13 @@ public class Player implements Serializable {
 	/**
 	 * @param name
 	 * @param dob
-	 * @param jersey_number
+	 * @param jerseyNumber
 	 */
-	public Player(String name, String dob, int jersey_number) {
-		this.name = name;
+	public Player(String firstName, String lastName, String dob, int jerseyNumber) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.dob = dob;
-		this.jersey_number = jersey_number;
+		this.jerseyNumber = jerseyNumber;
 	}
 
 	/**
@@ -63,20 +68,6 @@ public class Player implements Serializable {
 	 */
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	/**
@@ -108,31 +99,31 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * @return the date_of_birth
+	 * @return the dateOfBirth
 	 */
-	public Date getDate_of_birth() {
-		return date_of_birth;
+	public Date getDateOfBirth() {
+		return dateOfBirth;
 	}
 
 	/**
-	 * @param date_of_birth the date_of_birth to set
+	 * @param dateOfBirth the dateOfBirth to set
 	 */
-	public void setDate_of_birth(Date date_of_birth) {
-		this.date_of_birth = date_of_birth;
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 
 	/**
-	 * @return the jersey_number
+	 * @return the jerseyNumber
 	 */
-	public int getJersey_number() {
-		return jersey_number;
+	public int getJerseyNumber() {
+		return jerseyNumber;
 	}
 
 	/**
-	 * @param jersey_number the jersey_number to set
+	 * @param jerseyNumber the jerseyNumber to set
 	 */
-	public void setJersey_number(int jersey_number) {
-		this.jersey_number = jersey_number;
+	public void setJerseyNumber(int jerseyNumber) {
+		this.jerseyNumber = jerseyNumber;
 	}
 
 	public List<Team> getTeams() {
@@ -146,8 +137,8 @@ public class Player implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Player [name=" + name + ", dob=" + dob
-				+ ", jersey_number=" + jersey_number + "]";
+		return "Player [name=" + firstName + " " + lastName + ", dob=" + dob
+				+ ", jerseyNumber=" + jerseyNumber + "]";
 	}
 
 

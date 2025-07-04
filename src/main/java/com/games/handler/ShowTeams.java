@@ -4,11 +4,9 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import com.games.bean.Coach;
-import com.games.bean.Parent;
 import com.games.bean.Player;
 import com.games.bean.Team;
 

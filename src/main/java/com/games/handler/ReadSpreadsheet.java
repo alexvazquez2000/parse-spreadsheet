@@ -22,12 +22,14 @@ import org.hibernate.cfg.Configuration;
 import com.games.bean.Coach;
 import com.games.bean.Parent;
 import com.games.bean.Player;
+import com.games.bean.Season;
 import com.games.bean.Team;
 
 public class ReadSpreadsheet {
 
 	private static final String FILENAME = "915nebaseballwebsitedata.xlsx";
 
+	Season season25;
 	HashMap<String, Parent> parents = new HashMap<>();
 	HashMap<String, Player> players = new HashMap<>();
 	HashMap<String, Team> teams = new HashMap<>();
@@ -35,6 +37,32 @@ public class ReadSpreadsheet {
 	HashMap<String, Parent> moms = new HashMap<>();
 
 	public ReadSpreadsheet(String filename) throws IOException {
+		
+
+		/*
+		 *  // Example with standard ISO format
+    String isoDateString = "2023-10-26";
+    LocalDate isoLocalDate = LocalDate.parse(isoDateString);
+    java.sql.Date sqlDateFromIso = java.sql.Date.valueOf(isoLocalDate);
+    System.out.println("SQL Date from ISO string: " + sqlDateFromIso);
+
+    // Example with custom format
+    String customDateString = "26/10/2023";
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    LocalDate customLocalDate = LocalDate.parse(customDateString, formatter);
+    java.sql.Date sqlDateFromCustom = java.sql.Date.valueOf(customLocalDate);
+    System.out.println("SQL Date from custom string: " + sqlDateFromCustom);
+
+		 */
+		
+		season25 = new Season();
+		// date must be in standard ISO format
+		String dateString = "2025-05-01";
+		LocalDate isoLocalDate = LocalDate.parse(dateString);
+		Date sqlDateFromIso = java.sql.Date.valueOf(isoLocalDate);
+		season25.setBaseDate(sqlDateFromIso);
+		season25.setSeasonName("2025 Spring");
+		
 		FileInputStream file = new FileInputStream(new File(filename));
 		try (Workbook workbook = new XSSFWorkbook(file);) {
 			readCurrentPlayerSheet(workbook);
@@ -60,6 +88,8 @@ public class ReadSpreadsheet {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 
+		session.persist(season25);
+		
 		for (Entry<String, Parent> entry : parents.entrySet()) {
 			System.out.println(parents.get(entry.getKey()).toString());
 			Parent parent = parents.get(entry.getKey());
@@ -107,10 +137,11 @@ public class ReadSpreadsheet {
 		for (int i = 1; i < 15; i++) {
 			Row row = sheet.getRow(i);
 			String coachName = row.getCell(1).getRichStringCellValue().getString();
+			NameSplitter name = new NameSplitter(coachName);
 			String email = row.getCell(2).getRichStringCellValue().getString();
 			String phone = dataFormatter.formatCellValue(row.getCell(3));
 			//System.out.println(coachName + "\t" + email + "\t'" + phone + "'" );
-			Coach coach = new Coach(coachName,  phone, email);
+			Coach coach = new Coach(name.getFirstName(), name.getLastName(),  phone, email);
 			coaches.put(coachName, coach);
 		}
 		
@@ -120,7 +151,8 @@ public class ReadSpreadsheet {
 			String email = row.getCell(2).getRichStringCellValue().getString();
 			String phone = dataFormatter.formatCellValue(row.getCell(3));
 			//System.out.println(momName + "\t" + email + "\t'" + phone + "'" );
-			Parent mom = new Parent(momName,  phone, email);
+			NameSplitter name = new NameSplitter(momName);
+			Parent mom = new Parent(name.getFirstName(), name.getLastName(),  phone, email);
 			moms.put(momName, mom);
 		}
 
@@ -136,7 +168,9 @@ public class ReadSpreadsheet {
 					teamName = coachName;
 					team = findTeamByShortName(teamName);
 				} else if (!coachName.equals("")) {
-					team.getCoaches().add(coaches.get(coachName));
+					if (team != null) {
+						team.getCoaches().add(coaches.get(coachName));
+					}
 				}
 			}
 			teams.put(teamName, team);
@@ -146,11 +180,14 @@ public class ReadSpreadsheet {
 
 	private Team findTeamByShortName(String teamName) {
 		for (String s : teams.keySet()) {
-			if (s.startsWith(teamName)) {
+			if (s.startsWith(teamName)
+					|| (s.contains("JV") && teamName.equals("JV"))
+					|| (s.contains("Tournament") && teamName.equals("HS Tournament"))
+					) {
 				return teams.get(s);
 			}
 		}
-		return new Team("No players", teamName);
+		return null;
 	}
 
 	private void readCurrentPlayerSheet(Workbook workbook) {
@@ -189,7 +226,8 @@ public class ReadSpreadsheet {
 //					+ "===========");
 			Parent parent = null;
 			if (!parents.containsKey(parentName) ) {
-				parent = new Parent(parentName, phone, email);
+				NameSplitter name = new NameSplitter(parentName);
+				parent = new Parent(name.getFirstName(), name.getLastName(), phone, email);
 				parents.put(parentName, parent);
 			} else {
 				parent = parents.get(parentName);
@@ -199,20 +237,21 @@ public class ReadSpreadsheet {
 			if (teams.containsKey(teamName) ) {
 				team = teams.get(teamName);
 			} else {
-				team = new Team("2025-Spring", teamName);
+				team = new Team(season25, teamName);
 				teams.put(teamName, team);
 			}
 			int jerseyNum = 0;
 			if ( ! jersey.trim().equals("")) {
 				jerseyNum = Integer.valueOf(jersey);
 			}
-			Player player = new Player(playerName, dob, jerseyNum);
-			player.setDate_of_birth(date);
+			NameSplitter name = new NameSplitter(playerName);
+			Player player = new Player(name.getFirstName(), name.getLastName(), dob, jerseyNum);
+			player.setDateOfBirth(date);
 			//see if player already exists
 			if (players.containsKey(playerName)) {
 				//Don't add parents again, just add to the additional team
 				//System.out.println("Duplicate user '" + playerName + "'");
-				team.getPlayers().add(player);				
+				team.getPlayers().add(player);
 			} else {
 				player.getParents().add(parent);
 				players.put(playerName, player);
