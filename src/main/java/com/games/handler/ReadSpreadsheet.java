@@ -3,6 +3,7 @@ package com.games.handler;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +21,9 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import com.games.bean.Coach;
+import com.games.bean.Fee;
+import com.games.bean.GroupLevel;
+import com.games.bean.GroupLevelAndFees;
 import com.games.bean.Parent;
 import com.games.bean.Player;
 import com.games.bean.Season;
@@ -89,6 +93,30 @@ public class ReadSpreadsheet {
 		Transaction transaction = session.beginTransaction();
 
 		session.persist(season25);
+
+		GroupLevelAndFees[] gl = new GroupLevelAndFees[11]; 
+		gl[0] = new GroupLevelAndFees("5U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[1] = new GroupLevelAndFees("7U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[2] = new GroupLevelAndFees("8U CP",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[3] = new GroupLevelAndFees("10U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[4] = new GroupLevelAndFees("12U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[5] = new GroupLevelAndFees("14U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[6] = new GroupLevelAndFees("16U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[7] = new GroupLevelAndFees("BYAA",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[8] = new GroupLevelAndFees("HS JV",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[9] = new GroupLevelAndFees("HS",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[10] = new GroupLevelAndFees("HS ",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		
+		for (GroupLevelAndFees g : gl) {
+			GroupLevel group = new GroupLevel(g.levelName, g.targetAge);
+			session.persist(group);
+			Fee reg = new Fee(group, "Registration", g.registration);
+			Fee uniform = new Fee(group, "Uniform", g.uniform);
+			Fee teamFee = new Fee(group, "Team Fee", g.teamFee);
+			session.persist(reg);
+			session.persist(uniform);
+			session.persist(teamFee);
+		}
 		
 		for (Entry<String, Parent> entry : parents.entrySet()) {
 			System.out.println(parents.get(entry.getKey()).toString());
