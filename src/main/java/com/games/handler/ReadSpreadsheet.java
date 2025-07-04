@@ -21,9 +21,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import com.games.bean.Coach;
-import com.games.bean.Fee;
 import com.games.bean.GroupLevel;
-import com.games.bean.GroupLevelAndFees;
 import com.games.bean.Parent;
 import com.games.bean.Player;
 import com.games.bean.Season;
@@ -94,28 +92,25 @@ public class ReadSpreadsheet {
 
 		session.persist(season25);
 
-		GroupLevelAndFees[] gl = new GroupLevelAndFees[11]; 
-		gl[0] = new GroupLevelAndFees("5U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[1] = new GroupLevelAndFees("7U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[2] = new GroupLevelAndFees("8U CP",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[3] = new GroupLevelAndFees("10U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[4] = new GroupLevelAndFees("12U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[5] = new GroupLevelAndFees("14U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[6] = new GroupLevelAndFees("16U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[7] = new GroupLevelAndFees("BYAA",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[8] = new GroupLevelAndFees("HS JV",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[9] = new GroupLevelAndFees("HS",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[10] = new GroupLevelAndFees("HS ",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		GroupLevel[] gl = new GroupLevel[11]; 
+		//BigDecimal registration, teamFee, uniform
+		gl[0] = new GroupLevel("5U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[1] = new GroupLevel("7U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[2] = new GroupLevel("8U CP",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		//TODO: 10U is not filled-in
+		gl[3] = new GroupLevel("10U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		//TODO: 12U need cost of uniform -guessing 75
+		gl[4] = new GroupLevel("12U",5, new BigDecimal("75.00"), new BigDecimal("50.00"), new BigDecimal("75.00") );
+		gl[5] = new GroupLevel("14U",5, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
+		//TODO: 16U need cost of uniform -guessing 75
+		gl[6] = new GroupLevel("16U",5, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
+		gl[7] = new GroupLevel("BYAA",5, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
+		gl[8] = new GroupLevel("HS JV",5, new BigDecimal("100.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
+		gl[9] = new GroupLevel("HS",5, new BigDecimal("100.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
+		gl[10] = new GroupLevel("HS Tournamet",5, new BigDecimal("125.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
 		
-		for (GroupLevelAndFees g : gl) {
-			GroupLevel group = new GroupLevel(g.levelName, g.targetAge);
-			session.persist(group);
-			Fee reg = new Fee(group, "Registration", g.registration);
-			Fee uniform = new Fee(group, "Uniform", g.uniform);
-			Fee teamFee = new Fee(group, "Team Fee", g.teamFee);
-			session.persist(reg);
-			session.persist(uniform);
-			session.persist(teamFee);
+		for (GroupLevel g : gl) {
+			session.persist(g);
 		}
 		
 		for (Entry<String, Parent> entry : parents.entrySet()) {
