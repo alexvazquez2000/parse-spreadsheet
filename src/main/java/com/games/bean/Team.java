@@ -8,7 +8,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
@@ -28,9 +30,15 @@ public class Team implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	private String season;
+	
+	@ManyToOne
+	@JoinColumn(name="season_id", nullable=false)
+	private Season season;
+	
 	private String teamName;
+	
 	private String logo;
+	
 	@ManyToMany
 	private List<Player> players = new ArrayList<>();
 	@ManyToMany
@@ -44,7 +52,7 @@ public class Team implements Serializable {
 	 * @param season
 	 * @param teamName
 	 */
-	public Team(String season, String teamName) {
+	public Team(Season season, String teamName) {
 		this.season = season;
 		this.teamName = teamName;
 	}
@@ -66,14 +74,14 @@ public class Team implements Serializable {
 	/**
 	 * @return the season
 	 */
-	public String getSeason() {
+	public Season getSeason() {
 		return season;
 	}
 
 	/**
 	 * @param season the season to set
 	 */
-	public void setSeason(String season) {
+	public void setSeason(Season season) {
 		this.season = season;
 	}
 
