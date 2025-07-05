@@ -210,6 +210,7 @@ public class ReadSpreadsheet {
 				return teams.get(s);
 			}
 		}
+		System.err.println("ERROR Team '" + teamName + "' not found");
 		return null;
 	}
 
