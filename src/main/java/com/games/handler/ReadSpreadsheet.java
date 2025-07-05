@@ -95,19 +95,19 @@ public class ReadSpreadsheet {
 		GroupLevel[] gl = new GroupLevel[11]; 
 		//BigDecimal registration, teamFee, uniform
 		gl[0] = new GroupLevel("5U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[1] = new GroupLevel("7U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		gl[2] = new GroupLevel("8U CP",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[1] = new GroupLevel("7U",7, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[2] = new GroupLevel("8U CP",8, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
 		//TODO: 10U is not filled-in
-		gl[3] = new GroupLevel("10U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
+		gl[3] = new GroupLevel("10U",10, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
 		//TODO: 12U need cost of uniform -guessing 75
-		gl[4] = new GroupLevel("12U",5, new BigDecimal("75.00"), new BigDecimal("50.00"), new BigDecimal("75.00") );
-		gl[5] = new GroupLevel("14U",5, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
+		gl[4] = new GroupLevel("12U",12, new BigDecimal("75.00"), new BigDecimal("50.00"), new BigDecimal("75.00") );
+		gl[5] = new GroupLevel("14U",14, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
 		//TODO: 16U need cost of uniform -guessing 75
-		gl[6] = new GroupLevel("16U",5, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
-		gl[7] = new GroupLevel("BYAA",5, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
-		gl[8] = new GroupLevel("HS JV",5, new BigDecimal("100.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
-		gl[9] = new GroupLevel("HS",5, new BigDecimal("100.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
-		gl[10] = new GroupLevel("HS Tournamet",5, new BigDecimal("125.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
+		gl[6] = new GroupLevel("16U",16, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
+		gl[7] = new GroupLevel("BYAA",16, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
+		gl[8] = new GroupLevel("HS JV",16, new BigDecimal("100.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
+		gl[9] = new GroupLevel("HS",17, new BigDecimal("100.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
+		gl[10] = new GroupLevel("HS Tournamet",17, new BigDecimal("125.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
 		
 		for (GroupLevel g : gl) {
 			session.persist(g);
