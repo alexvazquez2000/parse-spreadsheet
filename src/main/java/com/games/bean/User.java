@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
  * @author Alex Vazquez <vazqueza2000@gmail.com>
  */
 @Entity
-@Table(name = "players")
+@Table(name = "users")
 public class User implements Serializable {
 
 	/**

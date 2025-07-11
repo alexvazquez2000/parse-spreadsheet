@@ -1,12 +1,9 @@
 package com.games.bean;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
-
-import com.games.bean.Entry.EntryType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,7 +40,7 @@ public class AuditLog implements Serializable {
 	private int recordId;
 
 	// Explicitly specifies ordinal mapping
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	@Column(name = "action", nullable = false)
 	private Action action;
 

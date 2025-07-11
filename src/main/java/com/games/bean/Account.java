@@ -1,10 +1,7 @@
 package com.games.bean;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.time.LocalDateTime;
-
-import javax.annotation.processing.Generated;
 
 import org.hibernate.annotations.CreationTimestamp;
 
