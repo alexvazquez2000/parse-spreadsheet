@@ -20,6 +20,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import com.games.bean.Account;
+import com.games.bean.Account.AccountType;
 import com.games.bean.Coach;
 import com.games.bean.GroupLevel;
 import com.games.bean.Parent;
@@ -41,34 +43,11 @@ public class ReadSpreadsheet {
 	public ReadSpreadsheet(String filename) throws IOException {
 		
 
-		/*
-		 *  // Example with standard ISO format
-    String isoDateString = "2023-10-26";
-    LocalDate isoLocalDate = LocalDate.parse(isoDateString);
-    java.sql.Date sqlDateFromIso = java.sql.Date.valueOf(isoLocalDate);
-    System.out.println("SQL Date from ISO string: " + sqlDateFromIso);
-
-    // Example with custom format
-    String customDateString = "26/10/2023";
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    LocalDate customLocalDate = LocalDate.parse(customDateString, formatter);
-    java.sql.Date sqlDateFromCustom = java.sql.Date.valueOf(customLocalDate);
-    System.out.println("SQL Date from custom string: " + sqlDateFromCustom);
-
-		 */
-		
-		season25 = new Season();
-		// date must be in standard ISO format
-		String dateString = "2025-05-01";
-		LocalDate isoLocalDate = LocalDate.parse(dateString);
-		Date sqlDateFromIso = java.sql.Date.valueOf(isoLocalDate);
-		season25.setBaseDate(sqlDateFromIso);
-		season25.setSeasonName("2025 Spring");
 		
 		FileInputStream file = new FileInputStream(new File(filename));
 		try (Workbook workbook = new XSSFWorkbook(file);) {
-			readCurrentPlayerSheet(workbook);
-			readCoaches(workbook);
+			//readCurrentPlayerSheet(workbook);
+			//readCoaches(workbook);
 		}
 		
 		//print what we read
@@ -90,8 +69,45 @@ public class ReadSpreadsheet {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.beginTransaction();
 
+		/*  // Example with standard ISO format
+			String isoDateString = "2023-10-26";
+			LocalDate isoLocalDate = LocalDate.parse(isoDateString);
+			java.sql.Date sqlDateFromIso = java.sql.Date.valueOf(isoLocalDate);
+			System.out.println("SQL Date from ISO string: " + sqlDateFromIso);
+
+			// Example with custom format
+			String customDateString = "26/10/2023";
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			LocalDate customLocalDate = LocalDate.parse(customDateString, formatter);
+			java.sql.Date sqlDateFromCustom = java.sql.Date.valueOf(customLocalDate);
+			System.out.println("SQL Date from custom string: " + sqlDateFromCustom);
+		 */
+		
+		season25 = new Season();
+		// date must be in standard ISO format
+		String dateString = "2025-05-01";
+		LocalDate isoLocalDate = LocalDate.parse(dateString);
+		Date sqlDateFromIso = java.sql.Date.valueOf(isoLocalDate);
+		season25.setBaseDate(sqlDateFromIso);
+		season25.setSeasonName("2025 Spring");
 		session.persist(season25);
 
+		//chart of accounts
+		Account account = null;
+		account = new Account("Cash", "1000", AccountType.asset);
+		session.persist(account);
+		account = new Account("Accounts Receivable", "1100", AccountType.asset);
+		session.persist(account);
+		account = new Account("Service Revenue", "4000", AccountType.revenue);
+		session.persist(account);
+		account = new Account("Accounts Payable", "2000", AccountType.liability);
+		session.persist(account);
+		account = new Account("Owner’s Equity", "3000", AccountType.equity);
+		session.persist(account);
+		account = new Account("Office Supplies", "5000", AccountType.expense);
+		session.persist(account);
+		//end chart of accounts
+		
 		GroupLevel[] gl = new GroupLevel[11]; 
 		//BigDecimal registration, teamFee, uniform
 		gl[0] = new GroupLevel("5U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
