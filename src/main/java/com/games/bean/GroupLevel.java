@@ -61,6 +61,76 @@ public class GroupLevel implements Serializable {
 		this.uniform = uniform;
 	}
 
+	/**
+	 * @return the levelName
+	 */
+	public String getLevelName() {
+		return levelName;
+	}
+
+	/**
+	 * @param levelName the levelName to set
+	 */
+	public void setLevelName(String levelName) {
+		this.levelName = levelName;
+	}
+
+	/**
+	 * @return the targetAge
+	 */
+	public int getTargetAge() {
+		return targetAge;
+	}
+
+	/**
+	 * @param targetAge the targetAge to set
+	 */
+	public void setTargetAge(int targetAge) {
+		this.targetAge = targetAge;
+	}
+
+	/**
+	 * @return the registration
+	 */
+	public BigDecimal getRegistration() {
+		return registration;
+	}
+
+	/**
+	 * @param registration the registration to set
+	 */
+	public void setRegistration(BigDecimal registration) {
+		this.registration = registration;
+	}
+
+	/**
+	 * @return the teamFee
+	 */
+	public BigDecimal getTeamFee() {
+		return teamFee;
+	}
+
+	/**
+	 * @param teamFee the teamFee to set
+	 */
+	public void setTeamFee(BigDecimal teamFee) {
+		this.teamFee = teamFee;
+	}
+
+	/**
+	 * @return the uniform
+	 */
+	public BigDecimal getUniform() {
+		return uniform;
+	}
+
+	/**
+	 * @param uniform the uniform to set
+	 */
+	public void setUniform(BigDecimal uniform) {
+		this.uniform = uniform;
+	}
+
 
 
 }

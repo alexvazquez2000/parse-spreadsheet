@@ -34,7 +34,11 @@ public class Team implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="season_id", nullable=false)
 	private Season season;
-	
+
+	@ManyToOne
+	@JoinColumn(name="level_id", nullable=false)
+	private GroupLevel level;
+
 	private String teamName;
 	
 	private String logo;
@@ -83,6 +87,20 @@ public class Team implements Serializable {
 	 */
 	public void setSeason(Season season) {
 		this.season = season;
+	}
+
+	/**
+	 * @return the level
+	 */
+	public GroupLevel getLevel() {
+		return level;
+	}
+
+	/**
+	 * @param level the level to set
+	 */
+	public void setLevel(GroupLevel level) {
+		this.level = level;
 	}
 
 	/**
