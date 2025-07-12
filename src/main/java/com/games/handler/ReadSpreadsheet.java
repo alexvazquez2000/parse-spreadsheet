@@ -46,8 +46,8 @@ public class ReadSpreadsheet {
 		
 		FileInputStream file = new FileInputStream(new File(filename));
 		try (Workbook workbook = new XSSFWorkbook(file);) {
-			//readCurrentPlayerSheet(workbook);
-			//readCoaches(workbook);
+			readCurrentPlayerSheet(workbook);
+			readCoaches(workbook);
 		}
 		
 		//print what we read
@@ -149,6 +149,8 @@ public class ReadSpreadsheet {
 
 		for (String key : teams.keySet()) {
 			Team team = teams.get(key);
+			team.setSeason(season25);
+			team.setLevel(findLevelFromTeamName(gl, team.getTeamName()));
 			System.out.println(team.toString());
 			// Save players of the team first
 			for (Player player : team.getPlayers()) {
@@ -168,6 +170,16 @@ public class ReadSpreadsheet {
 		transaction.commit();
 		session.close();
 		sessionFactory.close();
+	}
+
+	private GroupLevel findLevelFromTeamName(GroupLevel[] gl, String teamName) {
+		for (GroupLevel level : gl) {
+			if (teamName.contains(level.getLevelName()) ) {
+				return level;
+			}
+		}
+		System.err.println("finding level for team '" + teamName);
+		return gl[0];
 	}
 
 	private void readCoaches(Workbook workbook) {
