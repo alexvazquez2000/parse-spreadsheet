@@ -2,6 +2,9 @@ package com.games.bean;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +35,10 @@ public class Season implements Serializable {
 	@Column(name = "base_date")
 	private Date baseDate;
 	
+	@CreationTimestamp
+	@Column(name = "created_at", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP", nullable = false, updatable = false)
+	private LocalDateTime createdAt;
+
 	/**
 	 * @return the season_id
 	 */
