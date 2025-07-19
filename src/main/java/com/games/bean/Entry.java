@@ -50,7 +50,7 @@ public class Entry implements Serializable {
 	private BigDecimal amount;
 
 	// Explicitly specifies ordinal mapping
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	@Column(name = "entry_type", nullable = false)
 	private EntryType entryType;
 
