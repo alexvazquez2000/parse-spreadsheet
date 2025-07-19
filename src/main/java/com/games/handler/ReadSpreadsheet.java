@@ -100,7 +100,9 @@ public class ReadSpreadsheet {
 		journals[1] = new Journal("Sales Journal", "Tracks sales transactions", true);
 		journals[2] = new Journal("Cash Receipts Journal", "Incoming cash transactions", true);
 		//TODO: Make sure they are always saved to DB on this exact order
-		session.persist(journals);
+		for (Journal j : journals) {
+			session.persist(j);
+		}
 		
 		GroupLevel[] gl = new GroupLevel[11]; 
 		//BigDecimal registration, teamFee, uniform

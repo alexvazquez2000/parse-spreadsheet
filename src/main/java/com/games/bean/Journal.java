@@ -22,8 +22,8 @@ import jakarta.persistence.Table;
 public class Journal implements Serializable {
 
 	/**  */
-	private static final long serialVersionUID = 6286585483666006926L;
-
+	private static final long serialVersionUID = 8174744211082728543L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
