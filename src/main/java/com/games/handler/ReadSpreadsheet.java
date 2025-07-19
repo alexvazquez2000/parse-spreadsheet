@@ -24,6 +24,7 @@ import com.games.bean.Account;
 import com.games.bean.Account.AccountType;
 import com.games.bean.Coach;
 import com.games.bean.GroupLevel;
+import com.games.bean.Journal;
 import com.games.bean.Parent;
 import com.games.bean.Player;
 import com.games.bean.Season;
@@ -93,6 +94,13 @@ public class ReadSpreadsheet {
 		account = new Account("Office Supplies", "5000", AccountType.expense);
 		session.persist(account);
 		//end chart of accounts
+		
+		Journal[] journals = new Journal[3];
+		journals[0] = new Journal("General Journal", "Catch-all for manual entries", true);
+		journals[1] = new Journal("Sales Journal", "Tracks sales transactions", true);
+		journals[2] = new Journal("Cash Receipts Journal", "Incoming cash transactions", true);
+		//TODO: Make sure they are always saved to DB on this exact order
+		session.persist(journals);
 		
 		GroupLevel[] gl = new GroupLevel[11]; 
 		//BigDecimal registration, teamFee, uniform

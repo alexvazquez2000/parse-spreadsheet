@@ -46,5 +46,12 @@ public class Journal implements Serializable {
 	@Column(name = "created_at", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 
+	public Journal(String name, String description, boolean allowManualEntries) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.allowManualEntries = allowManualEntries;
+	}
+
 
 }
