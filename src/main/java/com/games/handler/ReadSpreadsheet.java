@@ -28,40 +28,26 @@ import com.games.bean.Parent;
 import com.games.bean.Player;
 import com.games.bean.Season;
 import com.games.bean.Team;
+import com.games.bean.User;
 
 public class ReadSpreadsheet {
 
 	private static final String FILENAME = "915nebaseballwebsitedata.xlsx";
 
 	Season season25;
-	HashMap<String, Parent> parents = new HashMap<>();
+	
+	//This includes parents and coaches
+	HashMap<String, User> users = new HashMap<>();
 	HashMap<String, Player> players = new HashMap<>();
 	HashMap<String, Team> teams = new HashMap<>();
-	HashMap<String, Coach> coaches = new HashMap<>();
-	HashMap<String, Parent> moms = new HashMap<>();
 
 	public ReadSpreadsheet(String filename) throws IOException {
-		
 
-		
 		FileInputStream file = new FileInputStream(new File(filename));
 		try (Workbook workbook = new XSSFWorkbook(file);) {
 			readCurrentPlayerSheet(workbook);
 			readCoaches(workbook);
 		}
-		
-		//print what we read
-//		for (String key : parents.keySet()) {
-//			System.out.println(parents.get(key).toString());
-//		}
-//		
-//		for (String key : players.keySet()) {
-//			System.out.println(players.get(key).toString());
-//		}
-//
-//		for (String key : teams.keySet()) {
-//			System.out.println(teams.get(key).toString());
-//		}
 		
 		Configuration config = new Configuration().configure();
 		SessionFactory sessionFactory = config.buildSessionFactory();
@@ -70,17 +56,17 @@ public class ReadSpreadsheet {
 		Transaction transaction = session.beginTransaction();
 
 		/*  // Example with standard ISO format
-			String isoDateString = "2023-10-26";
-			LocalDate isoLocalDate = LocalDate.parse(isoDateString);
-			java.sql.Date sqlDateFromIso = java.sql.Date.valueOf(isoLocalDate);
-			System.out.println("SQL Date from ISO string: " + sqlDateFromIso);
+			String isoDateString = "2023-10-26"
+			LocalDate isoLocalDate = LocalDate.parse(isoDateString)
+			java.sql.Date sqlDateFromIso = java.sql.Date.valueOf(isoLocalDate)
+			System.out.println("SQL Date from ISO string: " + sqlDateFromIso)
 
 			// Example with custom format
-			String customDateString = "26/10/2023";
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			LocalDate customLocalDate = LocalDate.parse(customDateString, formatter);
-			java.sql.Date sqlDateFromCustom = java.sql.Date.valueOf(customLocalDate);
-			System.out.println("SQL Date from custom string: " + sqlDateFromCustom);
+			String customDateString = "26/10/2023"
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+			LocalDate customLocalDate = LocalDate.parse(customDateString, formatter)
+			java.sql.Date sqlDateFromCustom = java.sql.Date.valueOf(customLocalDate)
+			System.out.println("SQL Date from custom string: " + sqlDateFromCustom)
 		 */
 		
 		season25 = new Season();
@@ -113,12 +99,9 @@ public class ReadSpreadsheet {
 		gl[0] = new GroupLevel("5U",5, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
 		gl[1] = new GroupLevel("7U",7, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
 		gl[2] = new GroupLevel("8U CP",8, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		//TODO: 10U is not filled-in
 		gl[3] = new GroupLevel("10U",10, new BigDecimal("40.00"), new BigDecimal("15.00"), new BigDecimal("40.00") );
-		//TODO: 12U need cost of uniform -guessing 75
 		gl[4] = new GroupLevel("12U",12, new BigDecimal("75.00"), new BigDecimal("50.00"), new BigDecimal("75.00") );
 		gl[5] = new GroupLevel("14U",14, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
-		//TODO: 16U need cost of uniform -guessing 75
 		gl[6] = new GroupLevel("16U",16, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
 		gl[7] = new GroupLevel("BYAA",16, new BigDecimal("90.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
 		gl[8] = new GroupLevel("HS JV",16, new BigDecimal("100.00"), new BigDecimal("35.00"), new BigDecimal("75.00") );
@@ -129,15 +112,17 @@ public class ReadSpreadsheet {
 			session.persist(g);
 		}
 		
-		for (Entry<String, Parent> entry : parents.entrySet()) {
-			System.out.println(parents.get(entry.getKey()).toString());
-			Parent parent = parents.get(entry.getKey());
-			session.persist(parent);
+		//Users include parents and coaches
+		for (Entry<String, User> entry : users.entrySet()) {
+			User user = users.get(entry.getKey());
+			if (user.getEmail().equals("")) {
+				user.setEmail(user.getFirstName() + " " + user.getLastName() + " invalid email");
+			}
+			session.persist(user);
 		}
 
 		for (String key : players.keySet()) {
 			Player player = players.get(key);
-			System.out.println(player.toString());
 			// Save parents of the player first
 			for (Parent parent : player.getParents()) {
 				if (!session.contains(parent)) {
@@ -161,12 +146,6 @@ public class ReadSpreadsheet {
 			session.persist(team);
 		}
 
-		for (String key : coaches.keySet()) {
-			Coach coach = coaches.get(key);
-			System.out.println(coach.toString());
-			session.persist(coach);
-		}
-
 		transaction.commit();
 		session.close();
 		sessionFactory.close();
@@ -188,12 +167,24 @@ public class ReadSpreadsheet {
 		for (int i = 1; i < 15; i++) {
 			Row row = sheet.getRow(i);
 			String coachName = row.getCell(1).getRichStringCellValue().getString();
-			NameSplitter name = new NameSplitter(coachName);
 			String email = row.getCell(2).getRichStringCellValue().getString();
 			String phone = dataFormatter.formatCellValue(row.getCell(3));
+			
+			if (email.equals("claudia.carpio@yahoo.com")) {
+				//this is to fix a duplicate entry on email 'claudia.carpio@yahoo.com' on parent Claudia Juarez and Coach Gabriel Juarez  
+				coachName  = "Gabriel and Claudia Juarez";
+			} else if (coachName.equals("Jeff Himeslpack")) {
+				//Typo on coach name - also a parent
+				coachName = "Jeff Himelspach";
+			}
+			NameSplitter name = new NameSplitter(coachName);
+				
 			//System.out.println(coachName + "\t" + email + "\t'" + phone + "'" );
-			Coach coach = new Coach(name.getFirstName(), name.getLastName(),  phone, email);
-			coaches.put(coachName, coach);
+			
+			User user = new User(name.getFirstName(), name.getLastName(),  phone, email);
+			Coach coach = new Coach();
+			user.setCoach(coach);
+			users.put(coachName, user);
 		}
 		
 		for (int i = 16; i < 23; i++) {
@@ -201,10 +192,13 @@ public class ReadSpreadsheet {
 			String momName = row.getCell(1).getRichStringCellValue().getString();
 			String email = row.getCell(2).getRichStringCellValue().getString();
 			String phone = dataFormatter.formatCellValue(row.getCell(3));
-			//System.out.println(momName + "\t" + email + "\t'" + phone + "'" );
 			NameSplitter name = new NameSplitter(momName);
-			Parent mom = new Parent(name.getFirstName(), name.getLastName(),  phone, email);
-			moms.put(momName, mom);
+			if (email.equals("jontiv777@yahoo.com")) {
+				//one of the moms has the same email as the parent on the main page
+				email = "";
+			}
+			User mom = new User(name.getFirstName(), name.getLastName(),  phone, email);
+			users.put(momName, mom);
 		}
 
 		//Read the team coaches - parse by columns
@@ -220,7 +214,20 @@ public class ReadSpreadsheet {
 					team = findTeamByShortName(teamName);
 				} else if (!coachName.equals("")) {
 					if (team != null) {
-						team.getCoaches().add(coaches.get(coachName));
+						Coach  c = null;
+						User u = users.get(coachName);
+						if (u != null) {
+							c = u.getCoach();
+						} else {
+							//user is not on the coaches list,  create a new user
+							NameSplitter name = new NameSplitter(coachName);
+							User extraCoach = new User(name.getFirstName(), name.getLastName(),  "", "");
+							c = new Coach();
+							extraCoach.setCoach(c);
+							users.put(coachName, extraCoach);
+						}
+						
+						team.getCoaches().add(c);
 					}
 				}
 			}
@@ -256,8 +263,32 @@ public class ReadSpreadsheet {
 			if (parentName.equals("Parent Name") || parentName.equals("")) {
 				continue;
 			}
-			
 			String email = row.getCell(2).getRichStringCellValue().getString();
+
+			//
+			if (parentName.equals("Tim Akers")) {
+				//this is to fix a duplicate entry on email 'timakersjr50@gmail.com - inconsistent name
+				parentName = "Timothy Akers";
+			} else if (parentName.equals("Rose Haluschak")) {
+				//this is to fix a duplicate entry on email  rows 34 and 60 
+				parentName = "Rose and Steve Haluschak";
+			} else if (parentName.equals("Caesar Zuniga")) {
+				//this is to consistency error between rows 35 and Coaches row 14 typo on name
+				//drczuniga@me.com
+				parentName = "Cesar Zuniga";
+			} else if (parentName.equals("Amanda Ontiveros") && email.equals("jontiv777@yahoo.com")) {
+				//this is to fix a duplicate entry on email 'jontiv777@yahoo.com' on coaches rows 5 and 20 
+				email = "";
+			} else if (parentName.equals("Joseph Ontiveros") && email.equals("jontiv777@yahoo.com")) {
+				//this is to fix a duplicate entry on email 'jontiv777@yahoo.com' on parent row 5 and coaches row 5  
+				parentName  = "Joey Ontiveros";
+			} else if (email.equals("claudia.carpio@yahoo.com")) {
+				//this is to fix a duplicate entry on email 'claudia.carpio@yahoo.com' on parent Claudia Juarez and Coach Gabriel Juarez  
+				parentName  = "Gabriel and Claudia Juarez";
+				//Also fixed in Coaches
+			}
+			
+			
 			String phone = dataFormatter.formatCellValue(row.getCell(3));
 			String playerName = row.getCell(4).getRichStringCellValue().getString();
 			String dob = dataFormatter.formatCellValue(row.getCell(5));
@@ -276,13 +307,23 @@ public class ReadSpreadsheet {
 //					+ "jersey:" + jersey + "\n"
 //					+ "teamName:" + teamName + "\n"
 //					+ "===========");
+//			System.out.flush();
+			
 			Parent parent = null;
-			if (!parents.containsKey(parentName) ) {
+			if (!users.containsKey(parentName) ) {
 				NameSplitter name = new NameSplitter(parentName);
-				parent = new Parent(name.getFirstName(), name.getLastName(), phone, email);
-				parents.put(parentName, parent);
+				User user = new User(name.getFirstName(), name.getLastName(), phone, email);
+				parent = new Parent();
+				user.setParent(parent);
+				users.put(parentName, user);
 			} else {
-				parent = parents.get(parentName);
+				User user = users.get(parentName);
+				if (user.getParent() == null ) {
+					parent = new Parent();
+					user.setParent(parent);
+				} else {
+					parent = user.getParent();
+				}
 			}
 			
 			Team team = null;

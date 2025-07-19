@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -26,14 +27,9 @@ public class Coach implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	@Column(name = "first_name", columnDefinition="varchar(100)")
-	private String firstName;
-	@Column(name = "last_name", columnDefinition="varchar(100)")
-	private String lastName;
-	@Column(columnDefinition="varchar(20)")
-	private String phone;
-	@Column(columnDefinition="varchar(100)")
-	private String email;
+
+	//@OneToOne(mappedBy = "coach")
+	//private User user;
 	
 	//BLOB: Can handle up to 65,535 bytes of data.
 	//MEDIUMBLOB: The maximum length supported is 16,777,215 bytes.
@@ -70,19 +66,6 @@ public class Coach implements Serializable {
 	}
 
 	/**
-	 * @param firstName
-	 * @param lastName
-	 * @param phone
-	 * @param email
-	 */
-	public Coach(String firstName, String lastName, String phone, String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.phone = phone;
-		this.email = email;
-	}
-
-	/**
 	 * @return the id
 	 */
 	public long getId() {
@@ -96,36 +79,4 @@ public class Coach implements Serializable {
 		this.id = id;
 	}
 
-	/**
-	 * @return the phone
-	 */
-	public String getPhone() {
-		return phone;
-	}
-
-	/**
-	 * @param phone the phone to set
-	 */
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	@Override
-	public String toString() {
-		return "Coach [id=" + id + ", name=" + firstName + " " + lastName + ", phone=" + phone + ", email=" + email + "]";
-	}
 }
