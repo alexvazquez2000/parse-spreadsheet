@@ -30,6 +30,10 @@ public class Transaction implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@ManyToOne
+	@JoinColumn(name="user_id", nullable=false)
+	private User userId;
+
 	@Column(name = "description", columnDefinition="varchar(255)")
 	private String description;
 
@@ -41,7 +45,7 @@ public class Transaction implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name="journal_id", nullable=false)
-	private Season journalId;
+	private Journal journalId;
 
 	@CreationTimestamp
 	@Column(name = "created_at", columnDefinition = "DATETIME(6) DEFAULT CURRENT_TIMESTAMP", nullable = false, updatable = false)

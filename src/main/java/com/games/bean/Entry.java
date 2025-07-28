@@ -38,11 +38,11 @@ public class Entry implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name="transaction_id", nullable=false)
-	private Season transactionId;
+	private Transaction transactionId;
 
 	@ManyToOne
 	@JoinColumn(name="account_id", nullable=false)
-	private Season accountId;
+	private Account accountId;
 
 	// Defines the DECIMAL(9,2) type in MySQL
 	// Mapped to BigDecimal in Java
