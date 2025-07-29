@@ -2,6 +2,8 @@ package com.games.bean;
 
 import java.io.Serializable;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,6 +41,10 @@ public class User implements Serializable {
 	private String email;
 	@Column(columnDefinition="varchar(100)")
 	private String passwd;
+	
+	@ColumnDefault("false")
+	@Column(name = "admin", nullable = false)
+	private boolean admin;
 	
 	//one-to-one
 	@OneToOne(cascade = CascadeType.ALL)
@@ -130,6 +136,20 @@ public class User implements Serializable {
 	 */
 	public void setPasswd(String passwd) {
 		this.passwd = passwd;
+	}
+
+	/**
+	 * @return the admin
+	 */
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	/**
+	 * @param admin the admin to set
+	 */
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 
 	/**

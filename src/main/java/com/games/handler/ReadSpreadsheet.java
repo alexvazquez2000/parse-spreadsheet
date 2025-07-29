@@ -128,6 +128,11 @@ public class ReadSpreadsheet {
 			if (user.getEmail().equals("")) {
 				user.setEmail(user.getFirstName() + " " + user.getLastName() + " invalid email");
 			}
+			if (user.getFirstName().equals("Arturo") && user.getLastName().equals("Vazquez")) {
+				user.setAdmin(true);
+			} else {
+				user.setAdmin(false);
+			}
 			session.persist(user);
 		}
 
